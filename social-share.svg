@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Português do Zero ao Avançado</title>
+  <desc id="description">Curso de Português com o Professor Leonardo Andrade.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080A40"/>
+      <stop offset="1" stop-color="#0A0E59"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <circle cx="1080" cy="-40" r="330" fill="none" stroke="#05DBF2" stroke-opacity=".42"/>
+  <circle cx="1080" cy="-40" r="250" fill="none" stroke="#18D97F" stroke-opacity=".2" stroke-width="38"/>
+  <rect x="78" y="96" width="12" height="190" rx="6" fill="#18D97F"/>
+  <text x="122" y="142" fill="#18D97F" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="5">PROFESSOR LEONARDO ANDRADE</text>
+  <text x="120" y="258" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="72" font-weight="800">PORTUGUÊS DO</text>
+  <text x="120" y="342" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="72" font-weight="800">ZERO AO AVANÇADO</text>
+  <text x="122" y="425" fill="#DCE6F0" font-family="Arial, sans-serif" font-size="31">Método claro e direto para estudar com segurança.</text>
+  <rect x="120" y="482" width="380" height="64" rx="12" fill="#18D97F"/>
+  <text x="151" y="524" fill="#080A40" font-family="Arial, sans-serif" font-size="27" font-weight="800">FOCO EM CONCURSOS</text>
+</svg>
