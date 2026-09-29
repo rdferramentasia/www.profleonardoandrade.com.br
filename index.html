@@ -260,8 +260,8 @@
     .footer p { margin: 0; }
     .footer p + p { margin-top: .55rem; }
     .legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem .9rem; margin-top: .7rem; }
-    .legal-links a { color: #d7e6f7; text-decoration: underline; text-underline-offset: 3px; }
-    .legal-links a:hover, .legal-links a:focus-visible { color: var(--gold); outline: none; }
+    .legal-links a, .legal-links button { padding: 0; border: 0; color: #d7e6f7; background: none; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+    .legal-links a:hover, .legal-links a:focus-visible, .legal-links button:hover, .legal-links button:focus-visible { color: var(--gold); outline: none; }
     .social-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .55rem; }
     .social-link { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: .48rem; padding: .45rem .7rem; border: 1px solid rgba(169,186,208,.45); border-radius: 999px; color: var(--white); font-size: .78rem; font-weight: 700; white-space: nowrap; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
     .social-link:hover, .social-link:focus-visible { border-color: var(--success); background: var(--success); color: var(--navy); outline: none; transform: translateY(-2px); }
@@ -284,6 +284,7 @@
     .cookie-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
     .cookie-button { min-height: 40px; padding: .55rem .85rem; border: 1px solid rgba(255,255,255,.5); border-radius: 8px; color: var(--white); background: transparent; font: inherit; font-size: .8rem; font-weight: 700; cursor: pointer; }
     .cookie-button--accept { border-color: var(--gold); color: var(--navy); background: var(--gold); }
+    .cookie-button--reject { border-color: var(--gold-light); }
 
     @media (min-width: 700px) {
       .container { width: min(100% - 56px, 1120px); }
@@ -705,6 +706,7 @@
         <nav class="legal-links" aria-label="Informações legais">
           <a href='/politica-de-privacidade'>Política de Privacidade</a>
           <a href='/termos-de-uso'>Termos de Uso</a>
+          <button id="cookie-preferences-trigger" type="button" aria-controls="cookie-banner">Preferências de cookies</button>
         </nav>
       </div>
       <nav class="social-links" aria-label="Redes sociais do Professor Leonardo Andrade">
@@ -724,19 +726,9 @@
   <dialog class="legal-modal" id="privacy-modal" aria-labelledby="privacy-title">
     <div class="legal-modal-content">
       <button class="legal-close" type="button" data-close-legal aria-label="Fechar política de privacidade">×</button>
-      <p class="eyebrow">Atualizada em 28 de setembro de 2026</p>
+      <p class="eyebrow">Política de Privacidade</p>
       <h2 id="privacy-title">Política de Privacidade</h2>
-      <p>Esta Política explica como os dados pessoais são tratados ao utilizar este site e solicitar informações sobre o curso Português do Zero ao Avançado, do Professor Leonardo Andrade.</p>
-      <h3>Dados que podem ser tratados</h3>
-      <p>Podem ser tratados dados fornecidos por você ao entrar em contato, como nome, número de WhatsApp e conteúdo da mensagem. Dados técnicos de navegação, como dispositivo, páginas acessadas e origem da visita, podem ser coletados somente se você autorizar os cookies de medição e publicidade.</p>
-      <h3>Finalidades</h3>
-      <p>Os dados são utilizados para responder solicitações, prestar suporte, melhorar o site, analisar campanhas e divulgar o curso de forma relevante. Não vendemos seus dados pessoais.</p>
-      <h3>Cookies e publicidade</h3>
-      <p>Com sua autorização, este site poderá utilizar Google Analytics e Meta Pixel para medir acessos e campanhas. Você pode recusar esses cookies sem prejudicar a navegação essencial no site.</p>
-      <h3>Compra pela Kiwify</h3>
-      <p>O pagamento e a liberação de acesso são realizados na plataforma Kiwify. Ao seguir para o checkout, o tratamento de dados também estará sujeito às políticas e aos termos daquela plataforma.</p>
-      <h3>Seus direitos e contato</h3>
-      <p>Você pode solicitar informações, correção, exclusão ou revisão do tratamento dos seus dados pelo WhatsApp de suporte: <a href="https://wa.me/5579991280299" target="_blank" rel="noopener noreferrer">(79) 99128-0299</a>. Esta política deve ser atualizada sempre que houver mudança relevante no tratamento de dados.</p>
+      <p>Consulte a <a href="/politica-de-privacidade">versão completa e atualizada da Política de Privacidade</a> para saber quais dados são tratados, por quem, para quais finalidades e como exercer seus direitos.</p>
     </div>
   </dialog>
 
@@ -760,10 +752,10 @@
   </dialog>
 
   <aside class="cookie-banner" id="cookie-banner" aria-label="Preferências de cookies" role="dialog">
-    <p>Usamos cookies opcionais de medição e anúncios para entender o desempenho das campanhas. Você pode aceitar ou recusar. Leia a <a href='/politica-de-privacidade'>Política de Privacidade</a>.</p>
+    <p>O Meta Pixel usa cookies opcionais para medir visitas e ações e apoiar anúncios. Ele fica desativado até você aceitar. Você pode mudar sua escolha a qualquer momento em “Preferências de cookies”. Leia a <a href='/politica-de-privacidade'>Política de Privacidade</a>.</p>
     <div class="cookie-actions">
-      <button class="cookie-button cookie-button--accept" type="button" data-cookie-choice="accepted">Aceitar cookies</button>
-      <button class="cookie-button" type="button" data-cookie-choice="rejected">Recusar</button>
+      <button class="cookie-button cookie-button--accept" type="button" data-cookie-choice="accepted">Aceitar cookies opcionais</button>
+      <button class="cookie-button cookie-button--reject" type="button" data-cookie-choice="rejected">Recusar cookies opcionais</button>
     </div>
   </aside>
 
@@ -900,12 +892,36 @@
       }
     }
 
+    const COOKIE_CHOICE_KEY = 'leonardo-cookie-choice-v2';
+    const COOKIE_CHOICE_DURATION = 180 * 24 * 60 * 60 * 1000;
     const safelyReadCookieChoice = () => {
-      try { return localStorage.getItem('leonardo-cookie-choice'); } catch (_) { return null; }
+      try {
+        const saved = JSON.parse(localStorage.getItem(COOKIE_CHOICE_KEY));
+        if (saved && ['accepted', 'rejected'].includes(saved.choice) &&
+            Number.isFinite(saved.at) && Date.now() - saved.at < COOKIE_CHOICE_DURATION) return saved.choice;
+      } catch (_) { /* escolha ausente ou armazenamento indisponível */ }
+      return null;
     };
 
     const safelySaveCookieChoice = (choice) => {
-      try { localStorage.setItem('leonardo-cookie-choice', choice); } catch (_) { /* armazenamento indisponível */ }
+      try {
+        localStorage.setItem(COOKIE_CHOICE_KEY, JSON.stringify({ choice, at: Date.now() }));
+        localStorage.removeItem('leonardo-cookie-choice');
+      } catch (_) { /* armazenamento indisponível */ }
+    };
+
+    const clearKnownMetaCookies = () => {
+      const domain = window.location.hostname;
+      const domains = [domain];
+      if (domain === 'profleonardoandrade.com.br' || domain.endsWith('.profleonardoandrade.com.br')) {
+        domains.push('.profleonardoandrade.com.br');
+      }
+      ['_fbp', '_fbc'].forEach((name) => {
+        document.cookie = `${name}=; Max-Age=0; Path=/; SameSite=Lax`;
+        domains.forEach((cookieDomain) => {
+          document.cookie = `${name}=; Max-Age=0; Path=/; Domain=${cookieDomain}; SameSite=Lax`;
+        });
+      });
     };
 
     const loadScript = (src) => {
@@ -916,7 +932,10 @@
       document.head.appendChild(script);
     };
 
+    let trackingActive = false;
     const activateTracking = () => {
+      if (trackingActive) return;
+      trackingActive = true;
       if (GOOGLE_ANALYTICS_ID && /^G-[A-Z0-9]+$/i.test(GOOGLE_ANALYTICS_ID)) {
         window.dataLayer = window.dataLayer || [];
         window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
@@ -975,15 +994,28 @@
     document.querySelectorAll('[data-cookie-choice]').forEach((button) => {
       button.addEventListener('click', () => {
         const choice = button.dataset.cookieChoice;
+        const wasAccepted = safelyReadCookieChoice() === 'accepted';
         safelySaveCookieChoice(choice);
         cookieBanner.classList.remove('is-visible');
+        if (window.location.hash === '#cookies') history.replaceState(null, '', window.location.pathname + window.location.search);
         if (choice === 'accepted') activateTracking();
+        if (choice === 'rejected') {
+          clearKnownMetaCookies();
+          if (wasAccepted || window.fbq) window.location.reload();
+        }
       });
     });
+
+    const showCookieBanner = () => {
+      cookieBanner.classList.add('is-visible');
+      cookieBanner.querySelector('[data-cookie-choice="rejected"]').focus();
+    };
+    document.getElementById('cookie-preferences-trigger').addEventListener('click', showCookieBanner);
 
     const savedCookieChoice = safelyReadCookieChoice();
     if (savedCookieChoice === 'accepted') activateTracking();
     if (!savedCookieChoice) cookieBanner.classList.add('is-visible');
+    if (window.location.hash === '#cookies') showCookieBanner();
     if (window.location.hash === '#privacidade') openLegalModal('privacy');
     if (window.location.hash === '#termos') openLegalModal('terms');
   </script>
